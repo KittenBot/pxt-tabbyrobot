@@ -4,25 +4,27 @@ namespace tabbyrobot {
     const REG_SERVO1 = 0x03
     const REG_SERVO2 = 0x04
     const REG_HEADLIGHT = 0x05
+    const REG_BATTERY = 0x06
 
     let neoStrip: neopixel.Strip;
 
-    export enum PWM {
-        M1P = 0,
-        M1N = 1,
-        M2P = 2,
-        M2N = 3,
-        LEFT = 4,
-        RIGHT = 5,
-        S1 = 6,
-        S2 = 7
-    }
 
     export enum LeftRight {
         //% block='Left'
         LEFT = 0,
         //% block='Right'
         RGIHT = 1,
+    }
+
+    /**
+     * Init Peripherals on tabby robot
+     */
+    //% blockId="tabby_init" block="Tabby Init"
+    //% group="Tabby"  weight=80
+    export function init() {
+        pins.i2cWriteNumber(TABBY_ADDR, 0x01, NumberFormat.UInt8BE)
+        pins.setPull(DigitalPin.P1, PinPullMode.PullNone)
+        pins.setPull(DigitalPin.P2, PinPullMode.PullNone)
     }
 
 
@@ -124,6 +126,40 @@ namespace tabbyrobot {
         let value = pins.analogReadPin(idx == LeftRight.LEFT ? AnalogPin.P1 : AnalogPin.P2)
         return value
     }
+
+    /**
+     * Battery voltage
+     */
+    //% block="Battery voltage"
+    export function battery(): number {
+        let buf = pins.createBuffer(1)
+        buf[0] = REG_BATTERY
+        pins.i2cWriteBuffer(TABBY_ADDR, buf)
+        let value = pins.i2cReadNumber(TABBY_ADDR, NumberFormat.UInt16BE)
+        return value / 1000
+    }
+
+    /**
+     * Ultrasonic distance
+     */
+    //% block="Ultrasonic distance"
+    export function ultrasonic(): number {
+        // send pulse
+        let trig = DigitalPin.P13
+        let echo = DigitalPin.P14
+        pins.setPull(trig, PinPullMode.PullNone)
+        pins.digitalWritePin(trig, 0)
+        control.waitMicros(2)
+        pins.digitalWritePin(trig, 1)
+        control.waitMicros(10)
+        pins.digitalWritePin(trig, 0)
+
+        // read pulse
+        let d = pins.pulseIn(echo, PulseValue.High, 50000)
+        return d / 58
+    }
+
+
 
 
 
