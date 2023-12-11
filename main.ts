@@ -1,6 +1,10 @@
 namespace tabbyrobot {
+    const TABBY_ADDR = 0x22
+    const REG_MOTOR = 0x02
+    const REG_SERVO1 = 0x03
+    const REG_SERVO2 = 0x04
+    const REG_HEADLIGHT = 0x05
 
-    let isInited = false;
     let neoStrip: neopixel.Strip;
 
     export enum PWM {
@@ -22,35 +26,6 @@ namespace tabbyrobot {
     }
 
 
-    function PCA9634Init(){
-        let addr = 0x00
-        let buf = pins.createBuffer(2)
-        buf[0] = 0x0
-        buf[1] = 0x01
-        pins.i2cWriteBuffer(addr, buf)
-        basic.pause(200)
-
-        pins.i2cWriteNumber(addr, 0x0, NumberFormat.UInt8BE);
-        let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE);
-
-        buf = pins.createBuffer(3)
-        buf[0] = 0x0C | 0x80
-        buf[1] = 0xAA
-        buf[2] = 0xAA
-        pins.i2cWriteBuffer(addr, buf)
-        basic.pause(200)
-        isInited = true;
-    }
-
-    function PCA9634Pwm(ch: PWM, value: number){
-        if (!isInited) PCA9634Init()
-        let buf2 = pins.createBuffer(2)
-        buf2[0] = 2+ch;
-        buf2[1] = value
-        pins.i2cWriteBuffer(0, buf2)
-    }
-
-
     /**
      * Init RGB pixels on tabby robot
      */
@@ -67,28 +42,46 @@ namespace tabbyrobot {
     /**
      * Front Light control
      */
-    //% block="Front Light $idx $value"
+    //% block="Front Light Left $left Right $right"
     //% group="Tabby"
-    export function frontlight(idx: LeftRight, value: number){
-        PCA9634Pwm(PWM.LEFT + idx, value)
+    //% left.min=0 left.max=100
+    //% right.min=0 right.max=100
+    export function frontlight(left: number, right: number){
+        let buf = pins.createBuffer(3)
+        buf[0] = REG_HEADLIGHT
+        buf[1] = left
+        buf[2] = right
+        pins.i2cWriteBuffer(TABBY_ADDR, buf)
+
     }
 
     /**
      * Motor Speed
      */
-    //% block="Motor $idx run at $speed"
-    //% speed.shadow="speedPicker"
-    export function motorRun(idx: LeftRight, speed: number){
-        let value = Math.round(speed * 255 / 100)
-        if (value > 255) value = 255
-        if (value < -255) value = -255
-        if (value >= 0){
-            PCA9634Pwm(PWM.M1P + idx * 2, value)
-            PCA9634Pwm(PWM.M1N + idx * 2, 0)
+    //% block="Motor $idx Left $left Right $right"
+    //% left.shadow="speedPicker"
+    //% right.shadow="speedPicker"
+    export function motorRun(left: number, right: number){
+        let buf = pins.createBuffer(5)
+        // REG, M1A, M1B, M2A, M2B
+        buf[0] = REG_MOTOR
+        if (left >= 0) {
+            buf[1] = left
+            buf[2] = 0
+
         } else {
-            PCA9634Pwm(PWM.M1P + idx * 2, 0)
-            PCA9634Pwm(PWM.M1N + idx * 2, -value)
+            buf[1] = 0
+            buf[2] = -left
         }
+        if (right >= 0) {
+            buf[3] = right
+            buf[4] = 0
+        } else {
+            buf[3] = 0
+            buf[4] = -right
+        }
+
+        pins.i2cWriteBuffer(TABBY_ADDR, buf)
     }
 
     /**
@@ -96,16 +89,17 @@ namespace tabbyrobot {
      */
     //% block="Servo $idx set to $degree"
     //% degree.min=0 degree.max=180
-    export function servoSet(idx: LeftRight, degree: number){
+    export function servoSet(idx: LeftRight, degree: number) {
+        let buf = pins.createBuffer(3)
+        buf[0] = idx == LeftRight.LEFT ? REG_SERVO1 : REG_SERVO2
         let pulsePosition = 10309
         let minPulse = 600
         let maxPulse = 2400
         let v_us = (degree * (maxPulse - minPulse) / 180 + minPulse)
         let value = Math.round(v_us * 256 / pulsePosition)
-        PCA9634Pwm(PWM.S1 + idx, value)
-
+        buf[1] = value & 0xff
+        buf[2] = value >> 8
+        pins.i2cWriteBuffer(TABBY_ADDR, buf)
     }
-
-
 
 }
