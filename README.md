@@ -1,5 +1,7 @@
 
-> Open this page at [https://xmeow.github.io/pxt-tabbyrobot/](https://xmeow.github.io/pxt-tabbyrobot/)
+## Tabby Robot
+
+This is a MakeCode extension for the Tabby Robot. It provides blocks for controlling the robot's motors and reading its sensors.
 
 ## Use as Extension
 
@@ -8,7 +10,7 @@ This repository can be added as an **extension** in MakeCode.
 * open [https://makecode.microbit.org/](https://makecode.microbit.org/)
 * click on **New Project**
 * click on **Extensions** under the gearwheel menu
-* search for **https://github.com/xmeow/pxt-tabbyrobot** and import
+* search for **https://github.com/kittenbot/pxt-tabbyrobot** and import
 
 ## Edit this project
 
@@ -16,7 +18,7 @@ To edit this repository in MakeCode.
 
 * open [https://makecode.microbit.org/](https://makecode.microbit.org/)
 * click on **Import** then click on **Import URL**
-* paste **https://github.com/xmeow/pxt-tabbyrobot** and click import
+* paste **https://github.com/kittenbot/pxt-tabbyrobot** and click import
 
 #### Metadata (used for search, rendering)
 
