@@ -145,7 +145,7 @@ namespace tabbyrobot {
     //% block="Ultrasonic distance"
     export function ultrasonic(): number {
         // send pulse
-        let trig = DigitalPin.P13
+        let trig = DigitalPin.P14
         let echo = DigitalPin.P14
         pins.setPull(trig, PinPullMode.PullNone)
         pins.digitalWritePin(trig, 0)
