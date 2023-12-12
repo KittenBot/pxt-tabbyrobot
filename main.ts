@@ -64,26 +64,26 @@ namespace tabbyrobot {
     //% left.shadow="speedPicker"
     //% right.shadow="speedPicker"
     export function motorRun(left: number, right: number) {
-        let buf = pins.createBuffer(5)
+        let buf2 = pins.createBuffer(5)
         // REG, M1A, M1B, M2A, M2B
-        buf[0] = REG_MOTOR
+        buf2[0] = REG_MOTOR
         if (left >= 0) {
-            buf[1] = left
-            buf[2] = 0
+            buf2[3] = left
+            buf2[4] = 0
 
         } else {
-            buf[1] = 0
-            buf[2] = -left
+            buf2[3] = 0
+            buf2[4] = -left
         }
         if (right >= 0) {
-            buf[3] = right
-            buf[4] = 0
+            buf2[1] = right
+            buf2[2] = 0
         } else {
-            buf[3] = 0
-            buf[4] = -right
+            buf2[1] = 0
+            buf2[2] = -right
         }
 
-        pins.i2cWriteBuffer(TABBY_ADDR, buf)
+        pins.i2cWriteBuffer(TABBY_ADDR, buf2)
     }
 
     /**
@@ -91,15 +91,15 @@ namespace tabbyrobot {
      */
     //% block="Motor Stop"
     export function motorStop() {
-        let buf = pins.createBuffer(5)
+        let buf3 = pins.createBuffer(5)
         // REG, M1A, M1B, M2A, M2B
-        buf[0] = REG_MOTOR
-        buf[1] = 0
-        buf[2] = 0
-        buf[3] = 0
-        buf[4] = 0
+        buf3[0] = REG_MOTOR
+        buf3[1] = 0
+        buf3[2] = 0
+        buf3[3] = 0
+        buf3[4] = 0
 
-        pins.i2cWriteBuffer(TABBY_ADDR, buf)
+        pins.i2cWriteBuffer(TABBY_ADDR, buf3)
     }
 
     /**
@@ -108,14 +108,14 @@ namespace tabbyrobot {
     //% block="Servo $idx set to $degree"
     //% degree.min=0 degree.max=180
     export function servoSet(idx: LeftRight, degree: number) {
-        let buf = pins.createBuffer(3)
-        buf[0] = idx == LeftRight.LEFT ? REG_SERVO1 : REG_SERVO2
+        let buf4 = pins.createBuffer(3)
+        buf4[0] = idx == LeftRight.LEFT ? REG_SERVO1 : REG_SERVO2
         let minPulse = 600
         let maxPulse = 2400
         let v_us = (degree * (maxPulse - minPulse) / 180 + minPulse)
-        buf[1] = v_us & 0xff
-        buf[2] = v_us >> 8
-        pins.i2cWriteBuffer(TABBY_ADDR, buf)
+        buf4[1] = v_us & 0xff
+        buf4[2] = v_us >> 8
+        pins.i2cWriteBuffer(TABBY_ADDR, buf4)
     }
 
     /**
@@ -132,14 +132,14 @@ namespace tabbyrobot {
      */
     //% block="Battery voltage"
     export function battery(): number {
-        let buf = pins.createBuffer(1)
-        buf[0] = REG_BATTERY
-        pins.i2cWriteBuffer(TABBY_ADDR, buf)
-        let value = pins.i2cReadNumber(TABBY_ADDR, NumberFormat.UInt16BE)
+        let buf5 = pins.createBuffer(1)
+        buf5[0] = REG_BATTERY
+        pins.i2cWriteBuffer(TABBY_ADDR, buf5)
+        let value2 = pins.i2cReadNumber(TABBY_ADDR, NumberFormat.UInt16BE)
         // VBAT - 27K - ADC - 47K - GND
         // console.log("adc:"+value)
-        value = value / 65535 * 1.57 * 3.3
-        return value
+        value2 = value2 / 65535 * 1.57 * 3.3
+        return value2
     }
 
     /**
