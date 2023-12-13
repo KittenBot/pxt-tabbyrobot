@@ -51,8 +51,8 @@ namespace tabbyrobot {
     export function frontlight(left: number, right: number) {
         let buf = pins.createBuffer(3)
         buf[0] = REG_HEADLIGHT
-        buf[1] = left
-        buf[2] = right
+        buf[1] = right
+        buf[2] = left
         pins.i2cWriteBuffer(TABBY_ADDR, buf)
 
     }
@@ -65,22 +65,25 @@ namespace tabbyrobot {
     //% right.shadow="speedPicker"
     export function motorRun(left: number, right: number) {
         let buf2 = pins.createBuffer(5)
+
+
+
         // REG, M1A, M1B, M2A, M2B
         buf2[0] = REG_MOTOR
         if (left >= 0) {
-            buf2[3] = left
-            buf2[4] = 0
+            buf2[1] = left
+            buf2[2] = 0
 
         } else {
-            buf2[3] = 0
-            buf2[4] = -left
+            buf2[1] = 0
+            buf2[2] = -left
         }
         if (right >= 0) {
-            buf2[1] = right
-            buf2[2] = 0
+            buf2[3] = right
+            buf2[4] = 0
         } else {
-            buf2[1] = 0
-            buf2[2] = -right
+            buf2[3] = 0
+            buf2[4] = -right
         }
 
         pins.i2cWriteBuffer(TABBY_ADDR, buf2)
