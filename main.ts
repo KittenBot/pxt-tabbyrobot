@@ -126,7 +126,7 @@ namespace tabbyrobot {
      */
     //% block="Line $idx"
     export function line(idx: LeftRight): number {
-        let value = pins.analogReadPin(idx == LeftRight.LEFT ? AnalogPin.P1 : AnalogPin.P2)
+        let value = pins.analogReadPin(idx == LeftRight.LEFT ? AnalogPin.P2 : AnalogPin.P1)
         return value
     }
 
