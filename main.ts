@@ -7,6 +7,7 @@ namespace tabbyrobot {
     const REG_BATTERY = 0x06
 
     let neoStrip: neopixel.Strip;
+    let distanceBuf = 0;
 
 
     export enum LeftRight {
@@ -153,23 +154,42 @@ namespace tabbyrobot {
     }
 
     /**
-     * Ultrasonic distance
+     * signal pin
+     * @param pin singal pin; eg: DigitalPin.P1
+     * @param unit desired conversion unit
      */
-    //% block="Ultrasonic distance"
+    //% blockId=robotbit_holeultrasonicver block="Ultrasonic distance"
     export function ultrasonic(): number {
-        // send pulse
-        let trig = DigitalPin.P14
-        let echo = DigitalPin.P14
-        pins.setPull(trig, PinPullMode.PullNone)
-        pins.digitalWritePin(trig, 0)
-        control.waitMicros(2)
-        pins.digitalWritePin(trig, 1)
-        control.waitMicros(10)
-        pins.digitalWritePin(trig, 0)
+        let pin = DigitalPin.P14
+        pins.setPull(pin, PinPullMode.PullNone);
+        // pins.setPull(pin, PinPullMode.PullDown);
+        pins.digitalWritePin(pin, 0);
+        control.waitMicros(2);
+        pins.digitalWritePin(pin, 1);
+        control.waitMicros(10);
+        pins.digitalWritePin(pin, 0);
+        pins.setPull(pin, PinPullMode.PullUp);
 
         // read pulse
-        let d = pins.pulseIn(echo, PulseValue.High, 50000)
-        return d / 58
+        let d = pins.pulseIn(pin, PulseValue.High, 30000);
+        let ret = d;
+        // filter timeout spikes
+        if (ret == 0 && distanceBuf != 0) {
+            ret = distanceBuf;
+        }
+        distanceBuf = d;
+        pins.digitalWritePin(pin, 0);
+        basic.pause(15)
+        if (parseInt(control.hardwareVersion()) == 2) {
+            d = ret * 10 / 58;
+        }
+        else {
+            // return Math.floor(ret / 40 + (ret / 800));
+            d = ret * 15 / 58;
+        }
+        
+        return Math.floor(d / 10) 
+
     }
 
 
