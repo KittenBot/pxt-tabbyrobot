@@ -6,6 +6,8 @@ namespace tabbyrobot {
     const REG_HEADLIGHT = 0x05
     const REG_BATTERY = 0x06
 
+    let inited = false
+
     let neoStrip: neopixel.Strip;
     let distanceBuf = 0;
 
@@ -24,15 +26,13 @@ namespace tabbyrobot {
         S2 = 1,
     }
 
-    /**
-     * Init Peripherals on tabby robot
-     */
-    //% blockId="tabby_init" block="Tabby Init"
-    //% group="Tabby"  weight=300
+    
     export function init() {
+        if (inited) return 
         pins.i2cWriteNumber(TABBY_ADDR, 0x01, NumberFormat.UInt8BE)
         pins.setPull(DigitalPin.P1, PinPullMode.PullNone)
         pins.setPull(DigitalPin.P2, PinPullMode.PullNone)
+        inited = true
     }
 
 
@@ -59,6 +59,7 @@ namespace tabbyrobot {
     //% right.min=0 right.max=100
     //% weight=250
     export function Headlights(left: number, right: number) {
+        init();
         let buf = pins.createBuffer(3)
         buf[0] = REG_HEADLIGHT
         buf[1] = right
@@ -76,9 +77,8 @@ namespace tabbyrobot {
     //% right.shadow="speedPicker"
     //% weight=340
     export function motorRun(left: number, right: number) {
+        init();
         let buf2 = pins.createBuffer(5)
-
-
 
         // REG, M1A, M1B, M2A, M2B
         buf2[0] = REG_MOTOR
@@ -108,6 +108,7 @@ namespace tabbyrobot {
     //% group="Motors"
     //% weight=330
     export function motorStop() {
+        init();
         let buf3 = pins.createBuffer(5)
         // REG, M1A, M1B, M2A, M2B
         buf3[0] = REG_MOTOR
@@ -127,6 +128,7 @@ namespace tabbyrobot {
     //% degree.min=0 degree.max=180
     //% weight=300
     export function servoSet(idx: Servolist, degree: number) {
+        init();
         let buf4 = pins.createBuffer(3)
         buf4[0] = idx == Servolist.S1 ? REG_SERVO1 : REG_SERVO2
         let minPulse = 600
@@ -155,6 +157,7 @@ namespace tabbyrobot {
     //% group="Sensor"
     //% weight=200
     export function battery(): number {
+        init();
         let buf5 = pins.createBuffer(1)
         buf5[0] = REG_BATTERY
         pins.i2cWriteBuffer(TABBY_ADDR, buf5)
