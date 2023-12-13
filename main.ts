@@ -16,6 +16,13 @@ namespace tabbyrobot {
         RGIHT = 1,
     }
 
+    export enum Servolist {
+        //% block='S1'
+        S1 = 0,
+        //% block='S2'
+        S2 = 1,
+    }
+
     /**
      * Init Peripherals on tabby robot
      */
@@ -110,9 +117,9 @@ namespace tabbyrobot {
      */
     //% block="Servo $idx set to $degree"
     //% degree.min=0 degree.max=180
-    export function servoSet(idx: LeftRight, degree: number) {
+    export function servoSet(idx: Servolist, degree: number) {
         let buf4 = pins.createBuffer(3)
-        buf4[0] = idx == LeftRight.LEFT ? REG_SERVO1 : REG_SERVO2
+        buf4[0] = idx == Servolist.S1 ? REG_SERVO1 : REG_SERVO2
         let minPulse = 600
         let maxPulse = 2400
         let v_us = (degree * (maxPulse - minPulse) / 180 + minPulse)
