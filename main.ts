@@ -53,7 +53,7 @@ namespace tabbyrobot {
     /**
      * Headlights control
      */
-    //% block="Headlights Left $left Right $right"
+    //% blockId="tabby_headlights" block="Headlights Left $left Right $right"
     //% group="Leds"
     //% left.min=0 left.max=100
     //% right.min=0 right.max=100
@@ -71,7 +71,7 @@ namespace tabbyrobot {
     /**
      * Motor Speed
      */
-    //% block="Motor $idx Left speed $left Right speed $right"
+    //% blockId="tabby_motor_speed" block="Motor $idx Left speed $left Right speed $right"
     //% group="Motors"
     //% left.shadow="speedPicker"
     //% right.shadow="speedPicker"
@@ -104,7 +104,7 @@ namespace tabbyrobot {
     /**
      * Motor Stop
      */
-    //% block="Motor Stop All"
+    //% blockId="tabby_motor_stop" block="Motor Stop All"
     //% group="Motors"
     //% weight=330
     export function motorStop() {
@@ -123,7 +123,7 @@ namespace tabbyrobot {
     /**
      * Servo Degree
      */
-    //% block="Servo $idx degree $degree"
+    //% blockId="tabby_servo_degree" block="Servo $idx degree $degree"
     //% group="Motors"
     //% degree.min=0 degree.max=180
     //% weight=300
@@ -142,7 +142,7 @@ namespace tabbyrobot {
     /**
      * Line state
      */
-    //% block="Tracking sensor $idx"
+    //% blockId="tabby_tracking_sensor" block="Tracking sensor $idx"
     //% group="Sensor"
     //% weight=300
     export function line(idx: LeftRight): number {
@@ -153,7 +153,7 @@ namespace tabbyrobot {
     /**
      * Battery voltage
      */
-    //% block="Battery voltage"
+    //% blockId="tabby_battery_voltage" block="Battery voltage"
     //% group="Sensor"
     //% weight=200
     export function battery(): number {
@@ -173,7 +173,7 @@ namespace tabbyrobot {
      * @param pin singal pin; eg: DigitalPin.P1
      * @param unit desired conversion unit
      */
-    //% blockId=robotbit_holeultrasonicver block="Ultrasonic distance"
+    //% blockId=tabby_ultrasonic_distance block="Ultrasonic distance"
     //% group="Sensor"
     //% weight=250
     export function ultrasonic(): number {
