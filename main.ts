@@ -39,7 +39,7 @@ namespace tabbyrobot {
     /**
      * Init RGB pixels on tabby robot
      */
-    //% blockId="tabby_rgb" block="Ambient RGB"
+    //% blockId="tabby_rgb" block="ambient RGB"
     //% group="Leds"  weight=63
     //% weight=200
     export function rgb(): neopixel.Strip {
@@ -52,8 +52,10 @@ namespace tabbyrobot {
 
     /**
      * Headlights control
+     * @param left set brightness; eg: 100
+     * @param right set brightness; eg: 100
      */
-    //% blockId="tabby_headlights" block="Headlights Left $left Right $right"
+    //% blockId="tabby_headlights" block="headlights left brightness $left right brightness $right"
     //% group="Leds"
     //% left.min=0 left.max=100
     //% right.min=0 right.max=100
@@ -69,9 +71,25 @@ namespace tabbyrobot {
     }
 
     /**
+    * Headlights turn off
+    */
+    //% blockId="tabby_headlights_turn_off" block="headlights turn off"
+    //% group="Leds"
+    //% weight=249
+    export function Headlightsturnoff() {
+        init();
+        let buf = pins.createBuffer(3)
+        buf[0] = REG_HEADLIGHT
+        buf[1] = 0
+        buf[2] = 0
+        pins.i2cWriteBuffer(TABBY_ADDR, buf)
+
+    }
+
+    /**
      * Motor Speed
      */
-    //% blockId="tabby_motor_speed" block="Motor $idx Left speed $left Right speed $right"
+    //% blockId="tabby_motor_speed" block="motor $idx left speed $left right speed $right"
     //% group="Motors"
     //% left.shadow="speedPicker"
     //% right.shadow="speedPicker"
@@ -104,7 +122,7 @@ namespace tabbyrobot {
     /**
      * Motor Stop
      */
-    //% blockId="tabby_motor_stop" block="Motor Stop All"
+    //% blockId="tabby_motor_stop" block="motor Stop All"
     //% group="Motors"
     //% weight=330
     export function motorStop() {
@@ -122,8 +140,9 @@ namespace tabbyrobot {
 
     /**
      * Servo Degree
+     * @param degree set; eg: 90
      */
-    //% blockId="tabby_servo_degree" block="Servo $idx degree $degree"
+    //% blockId="tabby_servo_degree" block="servo $idx degree $degree"
     //% group="Motors"
     //% degree.min=0 degree.max=180
     //% weight=300
@@ -142,9 +161,11 @@ namespace tabbyrobot {
     /**
      * Line state
      */
-    //% blockId="tabby_tracking_sensor" block="Tracking sensor $idx"
+    //% blockId="tabby_tracking_sensor" block="tracking sensor $idx"
     //% group="Sensor"
     //% weight=300
+    //% idx.fieldEditor="gridpicker"
+    //% idx.fieldOptions.columns=2
     export function line(idx: LeftRight): number {
         let value = pins.analogReadPin(idx == LeftRight.LEFT ? AnalogPin.P2 : AnalogPin.P1)
         return value
@@ -153,7 +174,7 @@ namespace tabbyrobot {
     /**
      * Battery voltage
      */
-    //% blockId="tabby_battery_voltage" block="Battery voltage"
+    //% blockId="tabby_battery_voltage" block="battery voltage(V)"
     //% group="Sensor"
     //% weight=200
     export function battery(): number {
@@ -172,7 +193,7 @@ namespace tabbyrobot {
      * signal pin
      * @param pin singal pin; eg: DigitalPin.P1
      */
-    //% blockId=tabby_ultrasonic_distance block="Ultrasonic distance(CM)"
+    //% blockId=tabby_ultrasonic_distance block="ultrasonic distance(CM)"
     //% group="Sensor"
     //% weight=250
     export function ultrasonic(): number {
