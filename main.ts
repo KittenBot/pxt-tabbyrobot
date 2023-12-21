@@ -171,13 +171,12 @@ namespace tabbyrobot {
     /**
      * signal pin
      * @param pin singal pin; eg: DigitalPin.P1
-     * @param unit desired conversion unit
      */
-    //% blockId=tabby_ultrasonic_distance block="Ultrasonic distance"
+    //% blockId=tabby_ultrasonic_distance block="Ultrasonic distance(CM)"
     //% group="Sensor"
     //% weight=250
     export function ultrasonic(): number {
-        let pin = DigitalPin.P14
+        let pin = DigitalPin.P8
         pins.setPull(pin, PinPullMode.PullNone);
         // pins.setPull(pin, PinPullMode.PullDown);
         pins.digitalWritePin(pin, 0);
