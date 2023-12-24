@@ -332,8 +332,10 @@ namespace tabbyrobot {
      * get IR value
      */
     //% group="IR"
-    //% block="IR button %IRButtons is pressed"
+    //% block="IR button $Button is pressed"
     //% weight=90
+    //% Button.fieldEditor="gridpicker"
+    //% Button.fieldOptions.columns=3
     export function irButton(Button: IRButtons): boolean {
         return (IR_Val & 0x00ff) == Button
     }
