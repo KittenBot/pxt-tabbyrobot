@@ -2,7 +2,7 @@
 //% groups='["Leds", "Motors", "Sensor","IR"]'
 //% block="TabbyRobot"
 
-namespace tabbyrobot {
+namespace tabbyRobot {
     const TABBY_ADDR = 0x16
     const REG_MOTOR = 0x02
     const REG_SERVO1 = 0x03
@@ -14,7 +14,7 @@ namespace tabbyrobot {
 
     let neoStrip: neopixel.Strip;
     let distanceBuf = 0;
-	let IR_Val = 0
+	let irVal = 0
 
 
     export enum LeftRight {
@@ -24,14 +24,14 @@ namespace tabbyrobot {
         RGIHT = 1,
     }
 
-    export enum Servolist {
+    export enum ServoList {
         //% block='S1'
         S1 = 0,
         //% block='S2'
         S2 = 1,
     }
 	
-	export enum IRButtons {
+	export enum IrButtons {
     //% block="menu"
     Menu = 2,
     //% block="up"
@@ -106,7 +106,7 @@ namespace tabbyrobot {
     //% left.min=0 left.max=100
     //% right.min=0 right.max=100
     //% weight=250
-    export function Headlights(left: number, right: number) {
+    export function headLights(left: number, right: number) {
         init();
         let buf = pins.createBuffer(3)
         buf[0] = REG_HEADLIGHT
@@ -122,7 +122,7 @@ namespace tabbyrobot {
     //% blockId="tabby_headlights_turn_off" block="headlights turn off"
     //% group="Leds"
     //% weight=249
-    export function Headlightsturnoff() {
+    export function headLightsTurnOff() {
         init();
         let buf = pins.createBuffer(3)
         buf[0] = REG_HEADLIGHT
@@ -142,7 +142,7 @@ namespace tabbyrobot {
     //% enabled.shadow=toggleOnOff
     //% enabled2.shadow=toggleOnOff
     //% weight=255
-    export function Headlightsonoffcontrol(enabled: boolean, enabled2: boolean) {
+    export function headlightsOnOffControl(enabled: boolean, enabled2: boolean) {
         init();
         let buf = pins.createBuffer(3)
         buf[0] = REG_HEADLIGHT
@@ -222,10 +222,10 @@ namespace tabbyrobot {
     //% group="Motors"
     //% degree.min=0 degree.max=180
     //% weight=300
-    export function servoSet(idx: Servolist, degree: number) {
+    export function servoSet(idx: ServoList, degree: number) {
         init();
         let buf4 = pins.createBuffer(3)
-        buf4[0] = idx == Servolist.S1 ? REG_SERVO1 : REG_SERVO2
+        buf4[0] = idx == ServoList.S1 ? REG_SERVO1 : REG_SERVO2
         let minPulse = 600
         let maxPulse = 2400
         let v_us = (degree * (maxPulse - minPulse) / 180 + minPulse)
@@ -319,8 +319,8 @@ namespace tabbyrobot {
         control.onEvent(98, 3500, handler)
         control.inBackground(() => {
             while (true) {
-                IR_Val = irCode()
-                if (IR_Val != 0xff00) {
+                irVal = irCode()
+                if (irVal != 0xff00) {
                     control.raiseEvent(98, 3500, EventCreationMode.CreateAndFire)
                 }
                 basic.pause(20)
@@ -336,8 +336,8 @@ namespace tabbyrobot {
     //% weight=90
     //% Button.fieldEditor="gridpicker"
     //% Button.fieldOptions.columns=3
-    export function irButton(Button: IRButtons): boolean {
-        return (IR_Val & 0x00ff) == Button
+    export function irButton(Button: IrButtons): boolean {
+        return (irVal & 0x00ff) == Button
     }
 
 
