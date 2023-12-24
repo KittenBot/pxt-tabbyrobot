@@ -31,7 +31,7 @@ namespace tabbyrobot {
         S2 = 1,
     }
 	
-	enum IRButtons {
+	export enum IRButtons {
     //% block="menu"
     Menu = 2,
     //% block="up"
@@ -128,6 +128,36 @@ namespace tabbyrobot {
         buf[0] = REG_HEADLIGHT
         buf[1] = 0
         buf[2] = 0
+        pins.i2cWriteBuffer(TABBY_ADDR, buf)
+
+    }
+
+    /**
+    * Headlights onoff control
+    * @param enabled set; eg: toggleOnOff.on
+    * @param enabled2 set; eg: toggleOnOff.on
+    */
+    //% blockId="tabby_headlights_onoff_control" block="headlights left $enabled right $enabled2"
+    //% group="Leds"
+    //% enabled.shadow=toggleOnOff
+    //% enabled2.shadow=toggleOnOff
+    //% weight=255
+    export function Headlightsonoffcontrol(enabled: boolean, enabled2: boolean) {
+        init();
+        let buf = pins.createBuffer(3)
+        buf[0] = REG_HEADLIGHT
+        if (enabled2){
+            buf[1] = 100
+        }
+        else
+            buf[1] = 0
+
+        if (enabled) {
+            buf[2] = 100
+        }
+        else
+            buf[2] = 0
+
         pins.i2cWriteBuffer(TABBY_ADDR, buf)
 
     }
