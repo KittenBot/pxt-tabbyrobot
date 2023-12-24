@@ -1,3 +1,7 @@
+//% color="#e76f51" weight=15 icon="\uf1b9"
+//% groups='["Leds", "Motors", "Sensor"]'
+//% block="TabbyRobot"
+
 namespace tabbyrobot {
     const TABBY_ADDR = 0x16
     const REG_MOTOR = 0x02
