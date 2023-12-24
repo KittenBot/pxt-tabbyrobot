@@ -117,25 +117,32 @@ namespace tabbyRobot {
     }
 
     /**
-    * Headlights turn off
+    * Headlights all
     */
-    //% blockId="tabby_headlights_turn_off" block="headlights turn off"
+    //% blockId="tabby_headlights_all" block="headlights all $enabled"
+    //% enabled.shadow=toggleOnOff
     //% group="Leds"
     //% weight=249
-    export function headLightsTurnOff() {
+    export function headLightsAll(enabled: boolean) {
         init();
         let buf = pins.createBuffer(3)
         buf[0] = REG_HEADLIGHT
-        buf[1] = 0
-        buf[2] = 0
+        if (enabled) {
+            buf[1] = 100
+            buf[2] = 100
+        }
+        else{
+            buf[1] = 0
+            buf[2] = 0
+        }
         pins.i2cWriteBuffer(TABBY_ADDR, buf)
 
     }
 
     /**
     * Headlights onoff control
-    * @param enabled set; eg: toggleOnOff.on
-    * @param enabled2 set; eg: toggleOnOff.on
+    * @param enabled set; eg: true
+    * @param enabled2 set; eg: true
     */
     //% blockId="tabby_headlights_onoff_control" block="headlights left $enabled right $enabled2"
     //% group="Leds"
@@ -198,7 +205,7 @@ namespace tabbyRobot {
     /**
      * Motor Stop
      */
-    //% blockId="tabby_motor_stop" block="motor Stop All"
+    //% blockId="tabby_motor_stop" block="motor stop all"
     //% group="Motors"
     //% weight=330
     export function motorStop() {
