@@ -189,7 +189,7 @@ namespace tabbyrobot {
         let value2 = pins.i2cReadNumber(TABBY_ADDR, NumberFormat.UInt16BE)
         // VBAT - 47K - ADC - 27K - GND
         // console.log("adc:"+value)
-        value2 = value2 / 65535 * 2.74 * 3.3
+        value2 = Math.floor(value2 / 65535 * 2.74 * 3.3 * 100) / 100
         return value2
     }
 
