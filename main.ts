@@ -187,9 +187,9 @@ namespace tabbyrobot {
         buf5[0] = REG_BATTERY
         pins.i2cWriteBuffer(TABBY_ADDR, buf5)
         let value2 = pins.i2cReadNumber(TABBY_ADDR, NumberFormat.UInt16BE)
-        // VBAT - 27K - ADC - 47K - GND
+        // VBAT - 47K - ADC - 27K - GND
         // console.log("adc:"+value)
-        value2 = value2 / 65535 * 1.57 * 3.3
+        value2 = value2 / 65535 * 2.74 * 3.3
         return value2
     }
 
