@@ -1,5 +1,5 @@
 //% color="#e76f51" weight=15 icon="\uf1b9"
-//% groups='["Leds", "Motors", "Sensor"]'
+//% groups='["Leds", "Motors", "Sensor","IR"]'
 //% block="TabbyRobot"
 
 namespace tabbyrobot {
@@ -14,6 +14,7 @@ namespace tabbyrobot {
 
     let neoStrip: neopixel.Strip;
     let distanceBuf = 0;
+	let IR_Val = 0
 
 
     export enum LeftRight {
@@ -29,6 +30,47 @@ namespace tabbyrobot {
         //% block='S2'
         S2 = 1,
     }
+	
+	enum IRButtons {
+    //% block="menu"
+    Menu = 2,
+    //% block="up"
+    Up = 5,
+    //% block="left"
+    Left = 8,
+    //% block="right"
+    Right = 10,
+    //% block="down"
+    Down = 13,
+    //% block="ok"
+    OK = 9,
+    //% block="plus"
+    Plus = 4,
+    //% block="minus"
+    Minus = 12,
+    //% block="back"
+    Back = 6,
+    //% block="0"
+    Zero = 14,
+    //% block="1"
+    One = 16,
+    //% block="2"
+    Two = 17,
+    //% block="3"
+    Three = 18,
+    //% block="4"
+    Four = 20,
+    //% block="5"
+    Five = 21,
+    //% block="6"
+    Six = 22,
+    //% block="7"
+    Seven = 24,
+    //% block="8"
+    Eight = 25,
+    //% block="9"
+    Nine = 26
+	}
 
     
     export function init() {
@@ -231,6 +273,39 @@ namespace tabbyrobot {
         
         return Math.floor(d / 10) 
 
+    }
+	
+	
+	//% shim=IRRobot::irCode
+	function irCode(): number {
+        return 0;
+    }
+
+    //% group="IR"
+    //% weight=100
+    //% block="on IR receiving"
+    export function irCallback(handler: () => void) {
+        pins.setPull(DigitalPin.P15, PinPullMode.PullUp)
+        control.onEvent(98, 3500, handler)
+        control.inBackground(() => {
+            while (true) {
+                IR_Val = irCode()
+                if (IR_Val != 0xff00) {
+                    control.raiseEvent(98, 3500, EventCreationMode.CreateAndFire)
+                }
+                basic.pause(20)
+            }
+        })
+    }
+
+    /**
+     * get IR value
+     */
+    //% group="IR"
+    //% block="IR button %IRButtons is pressed"
+    //% weight=90
+    export function irButton(Button: IRButtons): boolean {
+        return (IR_Val & 0x00ff) == Button
     }
 
 
