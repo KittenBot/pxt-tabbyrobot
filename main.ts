@@ -9,6 +9,7 @@ namespace tabbyRobot {
     const REG_SERVO2 = 0x04
     const REG_HEADLIGHT = 0x05
     const REG_BATTERY = 0x06
+    const REG_VERSION = 0X99
 
     let inited = false
 
@@ -38,7 +39,7 @@ namespace tabbyRobot {
 	
 	export enum IrButtons {
     //% block="menu"
-    Menu = 2,
+    Menu = 98,
     //% block="up"
     Up = 5,
     //% block="left"
@@ -68,13 +69,13 @@ namespace tabbyRobot {
     //% block="5"
     Five = 21,
     //% block="6"
-    Six = 22,
+    Six = 90,
     //% block="7"
-    Seven = 24,
+    Seven = 66,
     //% block="8"
-    Eight = 25,
+    Eight = 74,
     //% block="9"
-    Nine = 26
+    Nine = 82
 	}
 
     /**
@@ -305,7 +306,7 @@ namespace tabbyRobot {
         pins.i2cWriteBuffer(TABBY_ADDR, buf5)
         let value2 = pins.i2cReadNumber(TABBY_ADDR, NumberFormat.UInt16BE)
         // VBAT - 47K - ADC - 27K - GND
-        // console.log("adc:"+value)
+        //console.log("adc:" + value2)
         value2 = Math.floor(value2 / 65535 * 2.74 * 3.3 * 100) / 100
         return value2
     }
@@ -456,6 +457,20 @@ namespace tabbyRobot {
         }
         ws2812b.sendBuffer(neopixel_buf, DigitalPin.P16)
 
+    }
+
+    /**
+    * Getting the version number
+    */
+    //% block="read version"
+    //% weight=2
+    //% advanced=true
+    export function readVersion():string {
+        init();
+        pins.i2cWriteNumber(TABBY_ADDR, REG_VERSION, NumberFormat.UInt8BE);
+        let versionBuffer = pins.i2cReadBuffer(TABBY_ADDR, 3);
+        let versionString = `v${versionBuffer[0]}.${versionBuffer[1]}.${versionBuffer[2]}`;
+        return versionString;
     }
 
 
