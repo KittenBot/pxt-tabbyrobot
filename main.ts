@@ -220,19 +220,19 @@ namespace tabbyRobot {
         // REG, M1A, M1B, M2A, M2B
         buf2[0] = REG_MOTOR
         if (left >= 0) {
-            buf2[1] = left
-            buf2[2] = 0
-
-        } else {
             buf2[1] = 0
             buf2[2] = -left
+
+        } else {
+            buf2[1] = left
+            buf2[2] = 0
         }
         if (right >= 0) {
-            buf2[3] = right
-            buf2[4] = 0
-        } else {
             buf2[3] = 0
             buf2[4] = -right
+        } else {
+            buf2[3] = right
+            buf2[4] = 0
         }
 
         pins.i2cWriteBuffer(TABBY_ADDR, buf2)
