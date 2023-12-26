@@ -1,6 +1,6 @@
 //% color="#e76f51" weight=15 icon="\uf1b9"
 //% groups='["Leds", "RGB", "Motors", "Sensor","IR"]'
-//% block="TabbyRobot"
+//% block="TabbyBot"
 
 namespace tabbyRobot {
     const TABBY_ADDR = 0x16
@@ -315,7 +315,7 @@ namespace tabbyRobot {
      * signal pin
      * @param pin singal pin; eg: DigitalPin.P1
      */
-    //% blockId=tabby_ultrasonic_distance block="ultrasonic distance(CM)"
+    //% blockId=tabby_ultrasonic_distance block="ultrasonic distance(cm)"
     //% group="Sensor"
     //% weight=250
     export function ultrasonic(): number {
