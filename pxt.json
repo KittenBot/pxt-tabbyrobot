@@ -14,7 +14,8 @@
         "main.ts",
         "IR.cpp",
         "shims.d.ts",
-        "README.md"
+        "README.md",
+        "enums.d.ts"
     ],
     "testFiles": [
         "test.ts"
