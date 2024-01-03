@@ -12,6 +12,8 @@
     "files": [
         "main.blocks",
         "main.ts",
+        "IR.cpp",
+        "shims.d.ts",
         "README.md"
     ],
     "testFiles": [
