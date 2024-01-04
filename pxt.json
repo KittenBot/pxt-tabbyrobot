@@ -1,6 +1,6 @@
 {
     "name": "pxt-tabbyrobot",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "",
     "license": "MIT",
     "dependencies": {
@@ -12,10 +12,8 @@
     "files": [
         "main.blocks",
         "main.ts",
-        "IR.cpp",
-        "shims.d.ts",
         "README.md",
-        "enums.d.ts"
+        "background.ts"
     ],
     "testFiles": [
         "test.ts"

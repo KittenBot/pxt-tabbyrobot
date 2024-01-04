@@ -10,6 +10,72 @@ namespace tabbyRobot {
     const REG_HEADLIGHT = 0x05
     const REG_BATTERY = 0x06
     const REG_VERSION = 0X99
+    let irState: IrState;
+    let kittenIREventId = 202412
+
+    interface IrState {
+        protocol: 1;
+        hasNewDatagram: boolean;
+        bitsReceived: uint8;
+        addressSectionBits: uint16;
+        commandSectionBits: uint16;
+        hiword: uint16;
+        loword: uint16;
+        activeCommand: number;
+        repeatTimeout: number;
+        onIrDatagram: () => void;
+    }
+
+    const IR_REPEAT = 256;
+    const IR_INCOMPLETE = 257;
+    const IR_DATAGRAM = 258;
+
+    const REPEAT_TIMEOUT_MS = 120;
+
+    export enum IrCmd {
+        //% block="POWER"
+        OFF = 41565,
+        //% block="MENU"
+        MENU = 25245,
+        //% block="MUTE"
+        MUTE = 57885,
+        //% block="MODE"
+        MODE = 8925,
+        //% block="+"
+        Add = 765,
+        //% block="🔙"
+        Back = 49725,
+        //% block="⏪️"
+        FB = 57375,
+        //% block="⏯︎"
+        Stop = 43095,
+        //% block="⏩︎"
+        FF = 36975,
+        //% block="0"
+        Zero = 26775,
+        //% block="-"
+        Minus = 39015,
+        //% block="OK"
+        OK = 45135,
+        //% block="1"
+        One = 12495,
+        //% block="2"
+        Tow = 6375,
+        //% block="3"
+        Three = 31365,
+        //% block="4"
+        Four = 4335,
+        //% block="5"
+        Five = 14535,
+        //% block="6"
+        Six = 23205,
+        //% block="7"
+        Seven = 17085,
+        //% block="8"
+        Eight = 19125,
+        //% block="9"
+        Nine = 21165,
+    }
 
     let inited = false
 
@@ -350,43 +416,6 @@ namespace tabbyRobot {
         return Math.floor(d / 10) 
 
     }
-	
-	
-	//% shim=IRRobot::irCode
-	function irCode(): number {
-        return 0;
-    }
-
-    //% group="IR"
-    //% weight=100
-    //% blockId=tabby_ir_callback
-    //% block="on IR receiving"
-    export function irCallback(handler: () => void) {
-        pins.setPull(DigitalPin.P15, PinPullMode.PullUp)
-        control.onEvent(98, 3500, handler)
-        control.inBackground(() => {
-            while (true) {
-                irVal = irCode()
-                if (irVal != 0xff00) {
-                    control.raiseEvent(98, 3500, EventCreationMode.CreateAndFire)
-                }
-                basic.pause(20)
-            }
-        })
-    }
-
-    /**
-     * get IR value
-     */
-    //% group="IR"
-    //% blockId=tabby_ir_button
-    //% block="IR button $Button is pressed"
-    //% weight=90
-    //% Button.fieldEditor="gridpicker"
-    //% Button.fieldOptions.columns=3
-    export function irButton(Button: IrButtons): boolean {
-        return (irVal & 0x00ff) == Button
-    }
 
     /**
      * Set all RGB
@@ -472,9 +501,159 @@ namespace tabbyRobot {
         let versionString = `v${versionBuffer[0]}.${versionBuffer[1]}.${versionBuffer[2]}`;
         return versionString;
     }
+    function initIr() {
+        initIrState();
 
+        enableIrMarkSpaceDetection(DigitalPin.P15);
 
+        background.schedule(notifyIrEvents, background.Thread.Priority, background.Mode.Repeat, REPEAT_TIMEOUT_MS);
+    }
 
+    control.inBackground(initIr);
 
+    function appendBitToDatagram(bit: number): number {
+        irState.bitsReceived += 1;
 
+        if (irState.bitsReceived <= 8) {
+            irState.hiword = (irState.hiword << 1) + bit;
+        } else if (irState.bitsReceived <= 16) {
+            irState.hiword = (irState.hiword << 1) + bit;
+        } else if (irState.bitsReceived <= 32) {
+            irState.loword = (irState.loword << 1) + bit;
+        }
+
+        if (irState.bitsReceived === 32) {
+            irState.addressSectionBits = irState.hiword & 0xffff;
+            irState.commandSectionBits = irState.loword & 0xffff;
+            serial.writeString(irState.addressSectionBits.toString() + "-" + irState.commandSectionBits.toString())
+            control.raiseEvent(kittenIREventId, irState.commandSectionBits)
+            return IR_DATAGRAM;
+        } else {
+            return IR_INCOMPLETE;
+        }
+    }
+
+    function decode(markAndSpace: number): number {
+        if (markAndSpace < 1600) {
+            // low bit
+            return appendBitToDatagram(0);
+        } else if (markAndSpace < 2700) {
+            // high bit
+            return appendBitToDatagram(1);
+        }
+
+        irState.bitsReceived = 0;
+
+        if (markAndSpace < 12500) {
+            // Repeat detected
+            return IR_REPEAT;
+        } else if (markAndSpace < 14500) {
+            // Start detected
+            return IR_INCOMPLETE;
+        } else {
+            return IR_INCOMPLETE;
+        }
+    }
+
+    function enableIrMarkSpaceDetection(pin: DigitalPin) {
+        pins.setPull(pin, PinPullMode.PullNone);
+
+        let mark = 0;
+        let space = 0;
+
+        pins.onPulsed(pin, PulseValue.Low, () => {
+            mark = pins.pulseDuration();
+        });
+
+        pins.onPulsed(pin, PulseValue.High, () => {
+            // LOW
+            space = pins.pulseDuration();
+            const status = decode(mark + space);
+
+            if (status !== IR_INCOMPLETE) {
+                handleIrEvent(status);
+            }
+        });
+    }
+
+    function handleIrEvent(irEvent: number) {
+
+        // Refresh repeat timer
+        if (irEvent === IR_DATAGRAM || irEvent === IR_REPEAT) {
+            irState.repeatTimeout = input.runningTime() + REPEAT_TIMEOUT_MS;
+        }
+
+        if (irEvent === IR_DATAGRAM) {
+            irState.hasNewDatagram = true;
+
+            if (irState.onIrDatagram) {
+                background.schedule(irState.onIrDatagram, background.Thread.UserCallback, background.Mode.Once, 0);
+            }
+
+            const newCommand = irState.commandSectionBits >> 8;
+            // Process a new command
+            if (newCommand !== irState.activeCommand) {
+
+                irState.activeCommand = newCommand;
+            }
+        }
+    }
+
+    function initIrState() {
+        if (irState) {
+            return;
+        }
+
+        irState = {
+            protocol: undefined,
+            bitsReceived: 0,
+            hasNewDatagram: false,
+            addressSectionBits: 0,
+            commandSectionBits: 0,
+            hiword: 0, // TODO replace with uint32
+            loword: 0,
+            activeCommand: -1,
+            repeatTimeout: 0,
+            onIrDatagram: undefined,
+        };
+    }
+
+    function notifyIrEvents() {
+        if (irState.activeCommand === -1) {
+            // skip to save CPU cylces
+        } else {
+            const now = input.runningTime();
+            if (now > irState.repeatTimeout) {
+                // repeat timed out
+                irState.bitsReceived = 0;
+                irState.activeCommand = -1;
+            }
+        }
+    }
+
+    /**
+     * When button is pressed
+     * @param handler 
+     */
+    //% blockId=tabbyvision_on_button_pressed block="on button |%btn pressed"
+    //% weight=98 group="IR"
+    //% btn.fieldEditor="gridpicker"
+    //% btn.fieldOptions.columns=3
+    export function onButtonPressed(btn: IrCmd, handler: () => void) {
+        control.onEvent(kittenIREventId, btn, handler);
+    }
+
+    function ir_rec_to16BitHex(value: number): string {
+        let hex = "";
+        for (let pos = 0; pos < 4; pos++) {
+            let remainder = value % 16;
+            if (remainder < 10) {
+                hex = remainder.toString() + hex;
+            } else {
+                hex = String.fromCharCode(55 + remainder) + hex;
+            }
+            value = Math.idiv(value, 16);
+        }
+        return hex;
+    }
 }
