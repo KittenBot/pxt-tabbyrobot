@@ -412,8 +412,13 @@ namespace tabbyRobot {
             // return Math.floor(ret / 40 + (ret / 800));
             d = ret * 15 / 58;
         }
-        
-        return Math.floor(d / 10) 
+        let distance = Math.floor(d / 10)
+        if(distance){
+            return distance
+        }else{
+            return 999
+        }
+         
 
     }
 
