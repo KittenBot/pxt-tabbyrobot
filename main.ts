@@ -637,14 +637,14 @@ namespace tabbyRobot {
     }
 
     /**
-     * When button is pressed
+     * When remote control is pressed
      * @param handler 
      */
-    //% blockId=tabbyvision_on_button_pressed block="on button |%btn pressed"
+    //% blockId=tabbyvision_on_Remote_control_pressed block="on remote rontrol |%btn pressed"
     //% weight=98 group="IR"
     //% btn.fieldEditor="gridpicker"
     //% btn.fieldOptions.columns=3
-    export function onButtonPressed(btn: IrCmd, handler: () => void) {
+    export function onRemoteControlPressed(btn: IrCmd, handler: () => void) {
         control.onEvent(kittenIREventId, btn, handler);
     }
 
