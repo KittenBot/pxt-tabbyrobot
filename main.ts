@@ -93,7 +93,7 @@ namespace tabbyRobot {
         //% block='Left'
         LEFT = 0,
         //% block='Right'
-        RGIHT = 1,
+        RIGHT = 1,
     }
 
     export enum ServoList {
