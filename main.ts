@@ -33,29 +33,29 @@ namespace tabbyRobot {
     const REPEAT_TIMEOUT_MS = 120;
 
     export enum IrCmd {
-        //% block="POWER"
+        //% block="power"
         OFF = 41565,
-        //% block="MENU"
-        MENU = 25245,
-        //% block="MUTE"
-        MUTE = 57885,
-        //% block="MODE"
-        MODE = 8925,
+        //% block="menu"
+        Menu = 25245,
+        //% block="mute"
+        Mute = 57885,
+        //% block="mode"
+        Mode = 8925,
         //% block="+"
         Add = 765,
         //% block="🔙"
         Back = 49725,
         //% block="⏪️"
-        FB = 57375,
+        Fb = 57375,
         //% block="⏯︎"
         Stop = 43095,
         //% block="⏩︎"
-        FF = 36975,
+        Ff = 36975,
         //% block="0"
         Zero = 26775,
         //% block="-"
         Minus = 39015,
-        //% block="OK"
+        //% block="ok"
         OK = 45135,
         //% block="1"
         One = 12495,
@@ -90,10 +90,10 @@ namespace tabbyRobot {
 
 
     export enum LeftRight {
-        //% block='Left'
-        LEFT = 0,
-        //% block='Right'
-        RIGHT = 1,
+        //% block='left'
+        Left = 0,
+        //% block='right'
+        Right = 1,
     }
 
     export enum ServoList {
@@ -179,22 +179,6 @@ namespace tabbyRobot {
         inited = true
     }
 
-
-    /**
-     * Init RGB pixels on tabby robot
-     */
-    //% blockId=tabby_rgb block="ambient RGB"
-    //% group="Leds"  weight=63
-    //% weight=200
-    /**
-    export function rgb(): neopixel.Strip {
-        if (!neoStrip) {
-            neoStrip = neopixel.create(DigitalPin.P16, 2, NeoPixelMode.RGB)
-        }
-
-        return neoStrip;
-    }*/
-
     /**
      * Headlights control
      * @param left set brightness; eg: 100
@@ -269,7 +253,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * Motor Speed
+     * Motor speed
      * @param left speed; eg: 30
      * @param right speed; eg: 30
      */
@@ -305,7 +289,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * Motor Stop
+     * Motor stop
      */
     //% blockId=tabby_motor_stop block="motor stop all"
     //% group="Motors"
@@ -324,7 +308,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * Servo Degree
+     * Set servo angle
      * @param degree set; eg: 90
      */
     //% blockId=tabby_servo_degree block="servo $idx degree $degree=protractorPicker °"
@@ -347,7 +331,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * Line state
+     * Get the analog value of the touch sensor in the corresponding direction
      */
     //% blockId=tabby_tracking_sensor block="tracking sensor $idx"
     //% group="Sensor"
@@ -355,7 +339,7 @@ namespace tabbyRobot {
     //% idx.fieldEditor="gridpicker"
     //% idx.fieldOptions.columns=2
     export function line(idx: LeftRight): number {
-        let value = pins.analogReadPin(idx == LeftRight.LEFT ? AnalogPin.P2 : AnalogPin.P1)
+        let value = pins.analogReadPin(idx == LeftRight.Left ? AnalogPin.P2 : AnalogPin.P1)
         return value
     }
 
@@ -378,7 +362,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * signal pin
+     * The distance detected by ultrasonic waves
      * @param pin singal pin; eg: DigitalPin.P1
      */
     //% blockId=tabby_ultrasonic_distance block="ultrasonic distance(cm)"
@@ -497,6 +481,7 @@ namespace tabbyRobot {
     * Getting the version number
     */
     //% block="read version"
+    //% blockId=tabby_read_version
     //% weight=2
     //% advanced=true
     export function readVersion():string {
@@ -640,7 +625,7 @@ namespace tabbyRobot {
      * When remote control is pressed
      * @param handler 
      */
-    //% blockId=tabbyvision_on_Remote_control_pressed block="on remote rontrol |%btn pressed"
+    //% blockId=tabby_on_Remote_control_pressed block="on remote rontrol |%btn pressed"
     //% weight=98 group="IR"
     //% btn.fieldEditor="gridpicker"
     //% btn.fieldOptions.columns=3
