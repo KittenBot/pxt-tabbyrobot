@@ -14,6 +14,29 @@ The board features LEGO-compatible mounting holes, allowing for the installation
 
 [Tutorial Links](https://learn.kittenbot.cc/docs/TabbyBot/01QuickStart)
 
+
+
+## Overview
+
+![image.png](https://learn.kittenbot.cn/2024md_pic/202405161809922.png)
+
+1. Front headlights x2
+2. Infrared receiver sensor
+3. Ultrasonic interface
+4. Microbit slot
+5. Servo motor interfaces S1, S2
+6. 18650 battery compartment
+7. N20 geared motors x2
+8. Short circuit recovery button
+9. Power switch
+10. Power indicator light
+11. Charging indicator light (blue during charging, green when fully charged)
+12. Expansion programming interfaces (P0, P12, I2C, and Serial Port)
+13. Line-following sensors x2
+14. WS2812 RGB LEDs x2
+15. USB charging interface
+16. The car also has 13 round holes for attaching LEGO pins.
+
 ## Basic usage
 
 Usage: turning on/off the headlights,adjusting the brightness of the headlights
