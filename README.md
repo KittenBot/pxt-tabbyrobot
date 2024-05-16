@@ -1,3 +1,5 @@
+![image-20240516180358656](https://learn.kittenbot.cn/2024md_pic/202405161804934.png)
+
 ## Introduction
 
 This is a fully integrated and feature-rich STEM car for Microbit. It utilizes an 18650 lithium battery, providing ample power to drive power-hungry modules such as AI camera modules or voice recognition modules, without the need for multiple dry cell batteries. It comes with a built-in charging and discharging circuit, offering convenient usage.
@@ -8,9 +10,9 @@ The board features LEGO-compatible mounting holes, allowing for the installation
 
 
 
-Purchase link
+[Purchase link](https://www.kittenbot.cc/products/kittenbot-tabbybot-programming-robotics-kit)
 
-Tutorial Links
+[Tutorial Links](https://learn.kittenbot.cc/docs/TabbyBot/01QuickStart)
 
 ## Basic usage
 
