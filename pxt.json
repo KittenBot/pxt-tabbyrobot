@@ -11,7 +11,7 @@
     },
     "files": [
         "main.blocks",
-        "main.ts",
+        "tabbybot.ts",
         "README.md",
         "background.ts"
     ],
