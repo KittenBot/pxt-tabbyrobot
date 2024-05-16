@@ -180,7 +180,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * Headlights control
+     * Controls the brightness of the left and right headlights.Brightness level(0-100)
      * @param left set brightness; eg: 100
      * @param right set brightness; eg: 100
      */
@@ -200,7 +200,7 @@ namespace tabbyRobot {
     }
 
     /**
-    * Headlights all
+    * Controls the state of all headlights.If true, turns on the headlights; if false, turns them off.
     */
     //% blockId=tabby_headlights_all block="headlights all $enabled"
     //% enabled.shadow=toggleOnOff
@@ -223,7 +223,7 @@ namespace tabbyRobot {
     }
 
     /**
-    * Headlights onoff control
+    * Controls the on/off state of the left and right headlights.
     * @param enabled set; eg: true
     * @param enabled2 set; eg: true
     */
@@ -253,7 +253,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * Motor speed
+     * Controls the speed and direction of the left and right motors.Speed range is from -100 to 100, where positive values indicate forward motion and negative values indicate backward motion.
      * @param left speed; eg: 30
      * @param right speed; eg: 30
      */
@@ -289,7 +289,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * Motor stop
+     * Stops all motors.
      */
     //% blockId=tabby_motor_stop block="motor stop all"
     //% group="Motors"
@@ -308,7 +308,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * Set servo angle
+     * Sets the angle of the specified servo motor.Angle range is from 0 to 180 degrees.
      * @param degree set; eg: 90
      */
     //% blockId=tabby_servo_degree block="servo $idx degree $degree=protractorPicker °"
@@ -331,7 +331,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * Get the analog value of the touch sensor in the corresponding direction
+     * Retrieves the analog value from the specified tracking sensor.
      */
     //% blockId=tabby_tracking_sensor block="tracking sensor $idx"
     //% group="Sensor"
@@ -344,7 +344,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * Battery voltage
+     * Retrieves the battery voltage in volts (V).Battery voltage range is from 3.7V to 4.2V.When the voltage is close to 3.7V, please recharge the battery promptly.
      */
     //% blockId=tabby_battery_voltage block="battery voltage(V)"
     //% group="Sensor"
@@ -362,7 +362,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * The distance detected by ultrasonic waves
+     * Retrieves the distance detected by ultrasonic waves in centimeters (cm).
      * @param pin singal pin; eg: DigitalPin.P1
      */
     //% blockId=tabby_ultrasonic_distance block="ultrasonic distance(cm)"
@@ -407,7 +407,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * Set all RGB
+     * Sets the color of all RGB LEDs.
      */
     //% group="RGB"
     //% blockId=tabby_rgb_show_color
@@ -429,7 +429,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * RGB brightness
+     * Sets the brightness of the RGB LEDs.
      * @param brightness to set , eg: 50
      */
     //% group="RGB"
@@ -442,7 +442,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * clear all rgb
+     *  Clears all RGB LEDs.
      */
     //% group="RGB"
     //% blockId=tabby_clear_all_rgb
@@ -453,7 +453,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * Adjust the color of the RGB light separately
+     * Adjusts the color of a specific RGB light individually.
      * @param index  , eg: 1
      */
     //% group="RGB"
@@ -478,7 +478,7 @@ namespace tabbyRobot {
     }
 
     /**
-    * Getting the version number
+    * Reads the firmware version of the device.
     */
     //% block="read version"
     //% blockId=tabby_read_version
@@ -622,7 +622,7 @@ namespace tabbyRobot {
     }
 
     /**
-     * When remote control is pressed
+     * Registers code to run when a specific button on the remote control is pressed.
      * @param handler 
      */
     //% blockId=tabby_on_Remote_control_pressed block="on remote rontrol |%btn pressed"
