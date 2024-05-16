@@ -1,6 +1,6 @@
 {
     "name": "pxt-tabbyrobot",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "description": "",
     "license": "MIT",
     "dependencies": {
@@ -11,7 +11,7 @@
     },
     "files": [
         "main.blocks",
-        "main.ts",
+        "tabbybot.ts",
         "README.md",
         "background.ts"
     ],
