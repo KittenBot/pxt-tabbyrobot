@@ -1,3 +1,4 @@
 {
-    "tabbyRobot.battery|block": "电池 电压(V)"
+    "tabbyRobot.battery|block": "电池 电压(V)",
+    "tabbyRobot.readVersion|block": "获取设备版本号"
 }
