@@ -1,6 +1,6 @@
 {
-    "name": "pxt-tabbyrobot",
-    "version": "1.0.7",
+    "name": "TabbyBot",
+    "version": "1.0.8",
     "description": "",
     "license": "MIT",
     "dependencies": {
