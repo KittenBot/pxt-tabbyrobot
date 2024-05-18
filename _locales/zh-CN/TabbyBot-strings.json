@@ -13,7 +13,7 @@
     "tabbyRobot.clearAllRgb|block": "清空所有RGB",
     "tabbyRobot.setIndexColor|block": "RGB NO.|%index 显示颜色 |%rgb",
     "tabbyRobot.readVersion|block": "获取版本号",
-    "tabbyRobot.onRemoteControlPressed|block": "当遥控器按钮 $button 按下时运行",
+    "tabbyRobot.onRemoteControlPressed|block": "当遥控器按钮 |%btn 按下时运行",
     "tabbyRobot.LeftRight.Left|block": "左",
     "tabbyRobot.LeftRight.Right|block": "右",
     "tabbyRobot.ServoList.S1|block": "S1",
