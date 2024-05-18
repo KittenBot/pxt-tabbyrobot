@@ -14,8 +14,8 @@
         "tabbybot.ts",
         "README.md",
         "background.ts",
-        "_locales/zh-CN/tabbyrobot-strings.json",
-        "_locales/zh-tw/tabbyrobot-strings.json"
+        "_locales/zh-CN/TabbyBot-strings.json",
+        "_locales/zh-tw/TabbyBot-strings.json"
     ],
     "testFiles": [
         "test.ts"
