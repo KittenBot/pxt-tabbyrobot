@@ -42,12 +42,11 @@ The board features LEGO-compatible mounting holes, allowing for the installation
 Usage: turning on/off the headlights,adjusting the brightness of the headlights
 
 ```blocks
-
 input.onButtonPressed(Button.A, function () {
-    tabbyRobot.headLights(10, 10)
+    tabbyRobot.headLights(100, 0)
 })
 input.onButtonPressed(Button.B, function () {
-    tabbyRobot.headLights(10, 10)
+    tabbyRobot.headLights(0, 100)
 })
 for (let index = 0; index < 4; index++) {
     tabbyRobot.headlightsOnOffControl(true, false)
@@ -57,9 +56,9 @@ for (let index = 0; index < 4; index++) {
 }
 for (let index = 0; index < 4; index++) {
     tabbyRobot.headLightsAll(true)
-    basic.pause(100)
+    basic.pause(1000)
     tabbyRobot.headLightsAll(false)
-    basic.pause(100)
+    basic.pause(1000)
 }
 ```
 
@@ -76,10 +75,10 @@ basic.pause(500)
 basic.forever(function () {
     tabbyRobot.clearAllRgb()
     tabbyRobot.setIndexColor(1, tabbyRobot.RGBColors.White)
-    basic.pause(200)
+    basic.pause(1000)
     tabbyRobot.clearAllRgb()
     tabbyRobot.setIndexColor(2, tabbyRobot.RGBColors.White)
-    basic.pause(200)
+    basic.pause(1000)
 })
 ```
 
@@ -104,8 +103,8 @@ basic.forever(function () {
     tabbyRobot.motorRun(0, -30)
     basic.pause(1000)
     tabbyRobot.motorStop()
-    basic.pause(2000)
 })
+
 ```
 
 Usage: Line-following car
@@ -114,19 +113,19 @@ Usage: Line-following car
 input.onButtonPressed(Button.A, function () {
     flag = !(flag)
 })
-let rightSensor = 0
-let leftSensor = 0
 let flag = false
+let leftSensor = 0
+let rightSensor = 0
 let lineThreshold = 500
 flag = false
 basic.forever(function () {
-    leftSensor = tabbyRobot.line(tabbyRobot.LeftRight.LEFT)
-    rightSensor = tabbyRobot.line(tabbyRobot.LeftRight.RGIHT)
+    leftSensor = tabbyRobot.line(tabbyRobot.LeftRight.Left)
+    rightSensor = tabbyRobot.line(tabbyRobot.LeftRight.Right)
     if (flag) {
         if (leftSensor >= lineThreshold && rightSensor >= lineThreshold) {
             tabbyRobot.motorRun(30, 30)
         } else if (leftSensor < lineThreshold && rightSensor >= lineThreshold) {
-            tabbyRobot.motorRun(20, 60)
+            tabbyRobot.motorRun(30, 60)
         } else if (leftSensor >= lineThreshold && rightSensor < lineThreshold) {
             tabbyRobot.motorRun(60, 20)
         } else {
@@ -136,6 +135,7 @@ basic.forever(function () {
         tabbyRobot.motorStop()
     }
 })
+
 ```
 
 Usage: ultrasonic car
