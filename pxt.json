@@ -1,6 +1,6 @@
 {
     "name": "TabbyBot",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "description": "",
     "license": "MIT",
     "dependencies": {
@@ -10,7 +10,6 @@
         "ws2812b": "github:microsoft/pxt-ws2812b#v0.1.2"
     },
     "files": [
-        "main.blocks",
         "tabbybot.ts",
         "README.md",
         "background.ts",
