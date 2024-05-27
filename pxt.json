@@ -1,5 +1,5 @@
 {
-    "name": "tabbyBot",
+    "name": "pxt-tabbyrobot",
     "version": "1.0.12",
     "description": "STEM robot car designed for Microbit programming",
     "license": "MIT",
@@ -13,8 +13,8 @@
         "tabbybot.ts",
         "README.md",
         "background.ts",
-        "_locales/zh-CN/TabbyBot-strings.json",
-        "_locales/zh-tw/TabbyBot-strings.json"
+        "_locales/zh-CN/pxt-tabbyrobot-strings.json",
+        "_locales/zh-tw/pxt-tabbyrobot-strings.json"
     ],
     "testFiles": [
         "test.ts"
