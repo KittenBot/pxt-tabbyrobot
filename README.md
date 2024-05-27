@@ -1,4 +1,4 @@
-![image-20240516180358656](https://learn.kittenbot.cn/2024md_pic/202405161804934.png)
+![image-20240527180022289](README.assets/image-20240527180022289.png)
 
 ## Introduction
 
@@ -18,7 +18,9 @@ The board features LEGO-compatible mounting holes, allowing for the installation
 
 ## Overview
 
-![image.png](https://learn.kittenbot.cn/2024md_pic/202405161809922.png)
+![image-20240527180042358](README.assets/image-20240527180042358.png)
+
+
 
 1. Front headlights x2
 2. Infrared receiver sensor
