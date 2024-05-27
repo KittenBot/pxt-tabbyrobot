@@ -308,23 +308,23 @@ namespace tabbyRobot {
     }
 
     /**
-     * Sets the angle of the specified servo motor.Angle range is from 0 to 180 degrees.
-     * @param degree set; eg: 90
+     * Sets the angle of the specified servo motor.Angle range is from 0 to 180 angles.
+     * @param angle set; eg: 90
      */
-    //% blockId=tabby_servo_degree block="servo $idx degree $degree=protractorPicker °"
+    //% blockId=tabby_servo_angle block="set servo $idx angle $angle=protractorPicker °"
     //% idx.fieldEditor="gridpicker"
     //% idx.fieldOptions.width=100
     //% idx.fieldOptions.columns=2
     //% group="Motors"
-    //% degree.min=0 degree.max=180
+    //% angle.min=0 angle.max=180
     //% weight=300
-    export function servoSet(idx: ServoList, degree: number) {
+    export function servoSet(idx: ServoList, angle: number) {
         init();
         let buf4 = pins.createBuffer(3)
         buf4[0] = idx == ServoList.S1 ? REG_SERVO1 : REG_SERVO2
         let minPulse = 600
         let maxPulse = 2400
-        let v_us = (degree * (maxPulse - minPulse) / 180 + minPulse)
+        let v_us = (angle * (maxPulse - minPulse) / 180 + minPulse)
         buf4[1] = v_us & 0xff
         buf4[2] = v_us >> 8
         pins.i2cWriteBuffer(TABBY_ADDR, buf4)
@@ -411,7 +411,7 @@ namespace tabbyRobot {
      */
     //% group="RGB"
     //% blockId=tabby_rgb_show_color
-    //% block=" RGB show color |%rgb"
+    //% block=" set RGB color |%rgb"
     //% weight=200
     export function rgbShowColor(rgb: RGBColors) {
         let r = (rgb >> 16) * (_brightness / 255);
@@ -459,7 +459,7 @@ namespace tabbyRobot {
     //% group="RGB"
     //% index.min=1 index.max=2
     //% blockId=tabby_set_index_color
-    //% block="RGB NO.|%index show color|%rgb"
+    //% block="set RGB rgb|%index color|%rgb"
     //% weight=190
     export function setIndexColor(index: number, rgb: RGBColors) {
         let f = index-1;
