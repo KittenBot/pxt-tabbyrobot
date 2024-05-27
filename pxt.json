@@ -1,7 +1,7 @@
 {
-    "name": "TabbyBot",
-    "version": "1.0.9",
-    "description": "",
+    "name": "tabbyBot",
+    "version": "1.0.12",
+    "description": "STEM robot car designed for Microbit programming",
     "license": "MIT",
     "dependencies": {
         "core": "*",
