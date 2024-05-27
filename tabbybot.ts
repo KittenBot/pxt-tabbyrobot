@@ -311,7 +311,7 @@ namespace tabbyRobot {
      * Sets the angle of the specified servo motor.Angle range is from 0 to 180 angles.
      * @param angle set; eg: 90
      */
-    //% blockId=tabby_servo_angle block="set servo $idx angle $angle=protractorPicker °"
+    //% blockId=tabby_servo_angle block="set servo $idx angle to $angle=protractorPicker °"
     //% idx.fieldEditor="gridpicker"
     //% idx.fieldOptions.width=100
     //% idx.fieldOptions.columns=2
@@ -459,7 +459,7 @@ namespace tabbyRobot {
     //% group="RGB"
     //% index.min=1 index.max=2
     //% blockId=tabby_set_index_color
-    //% block="set RGB rgb|%index color|%rgb"
+    //% block="set RGB No.|%index color|%rgb"
     //% weight=190
     export function setIndexColor(index: number, rgb: RGBColors) {
         let f = index-1;
