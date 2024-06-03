@@ -1,12 +1,10 @@
 {
     "name": "pxt-tabbyrobot",
-    "version": "1.0.13",
-    "description": "STEM robot car designed for Microbit programming",
+    "version": "1.0.14",
+    "description": "STEM robot car designed for micro:bit programming",
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "radio": "*",
-        "microphone": "*",
         "ws2812b": "github:microsoft/pxt-ws2812b#v0.1.2"
     },
     "files": [

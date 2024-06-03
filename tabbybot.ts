@@ -625,7 +625,7 @@ namespace tabbyRobot {
      * Registers code to run when a specific button on the remote control is pressed.
      * @param handler 
      */
-    //% blockId=tabby_on_Remote_control_pressed block="on remote rontrol |%btn pressed"
+    //% blockId=tabby_on_Remote_control_pressed block="on remote control |%btn pressed"
     //% weight=98 group="IR"
     //% btn.fieldEditor="gridpicker"
     //% btn.fieldOptions.columns=3
