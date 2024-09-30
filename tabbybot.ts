@@ -13,6 +13,8 @@ namespace tabbyRobot {
     let irState: IrState;
     let kittenIREventId = 202412
 
+    let trackingLineThreshold = 400
+
     interface IrState {
         protocol: 1;
         hasNewDatagram: boolean;
@@ -81,7 +83,7 @@ namespace tabbyRobot {
 
     //let neoStrip: neopixel.Strip;
     let distanceBuf = 0;
-	let irVal = 0
+    let irVal = 0
     let neopixel_buf = pins.createBuffer(16 * 3);
     for (let i = 0; i < 2 * 3; i++) {
         neopixel_buf[i] = 0
@@ -102,47 +104,47 @@ namespace tabbyRobot {
         //% block='S2'
         S2 = 1,
     }
-	
-	export enum IrButtons {
-    //% block="menu"
-    Menu = 98,
-    //% block="up"
-    Up = 5,
-    //% block="left"
-    Left = 8,
-    //% block="right"
-    Right = 10,
-    //% block="down"
-    Down = 13,
-    //% block="ok"
-    OK = 9,
-    //% block="plus"
-    Plus = 4,
-    //% block="minus"
-    Minus = 12,
-    //% block="back"
-    Back = 6,
-    //% block="0"
-    Zero = 14,
-    //% block="1"
-    One = 16,
-    //% block="2"
-    Two = 17,
-    //% block="3"
-    Three = 18,
-    //% block="4"
-    Four = 20,
-    //% block="5"
-    Five = 21,
-    //% block="6"
-    Six = 90,
-    //% block="7"
-    Seven = 66,
-    //% block="8"
-    Eight = 74,
-    //% block="9"
-    Nine = 82
-	}
+
+    export enum IrButtons {
+        //% block="menu"
+        Menu = 98,
+        //% block="up"
+        Up = 5,
+        //% block="left"
+        Left = 8,
+        //% block="right"
+        Right = 10,
+        //% block="down"
+        Down = 13,
+        //% block="ok"
+        OK = 9,
+        //% block="plus"
+        Plus = 4,
+        //% block="minus"
+        Minus = 12,
+        //% block="back"
+        Back = 6,
+        //% block="0"
+        Zero = 14,
+        //% block="1"
+        One = 16,
+        //% block="2"
+        Two = 17,
+        //% block="3"
+        Three = 18,
+        //% block="4"
+        Four = 20,
+        //% block="5"
+        Five = 21,
+        //% block="6"
+        Six = 90,
+        //% block="7"
+        Seven = 66,
+        //% block="8"
+        Eight = 74,
+        //% block="9"
+        Nine = 82
+    }
 
     /**
      * colors for ws2812 strip
@@ -170,9 +172,43 @@ namespace tabbyRobot {
         Black = 0x000000
     }
 
-    
+    /**
+    * tracking line state
+    */
+    export enum TrackingState {
+        //% block="● ●" 
+        LR_line = 0,
+
+        //% block="◌ ●" 
+        R_line = 1,
+
+        //% block="● ◌" 
+        L_line = 2,
+
+        //% block="◌ ◌" 
+        LR_unlin = 3
+    }
+
+    /**
+    * Motor state
+    */
+    export enum MotorState {
+        //% block="forward" 
+        Forward = 0,
+
+        //% block="back" 
+        Back = 1,
+
+        //% block="left" 
+        Left = 2,
+
+        //% block="right" 
+        Right = 3
+    }
+
+
     export function init() {
-        if (inited) return 
+        if (inited) return
         pins.i2cWriteNumber(TABBY_ADDR, 0x01, NumberFormat.UInt8BE)
         pins.setPull(DigitalPin.P1, PinPullMode.PullNone)
         pins.setPull(DigitalPin.P2, PinPullMode.PullNone)
@@ -214,7 +250,7 @@ namespace tabbyRobot {
             buf[1] = 100
             buf[2] = 100
         }
-        else{
+        else {
             buf[1] = 0
             buf[2] = 0
         }
@@ -236,7 +272,7 @@ namespace tabbyRobot {
         init();
         let buf = pins.createBuffer(3)
         buf[0] = REG_HEADLIGHT
-        if (enabled2){
+        if (enabled2) {
             buf[1] = 100
         }
         else
@@ -286,6 +322,47 @@ namespace tabbyRobot {
         }
 
         pins.i2cWriteBuffer(TABBY_ADDR, buf2)
+    }
+
+    /**
+     * Set the motor running state.
+     */
+    //% blockId=tabby_motor block="motor %state"
+    //% group="Motors"
+    //% weight=338
+    export function motor(state: MotorState) {
+        if (state == 0) {
+            motorRun(100, 100)
+        } else if (state == 1) {
+            motorRun(-100, -100)
+        } else if (state == 2) {
+            motorRun(0, 100)
+        } else if (state == 3) {
+            motorRun(100, 0)
+        }
+    }
+
+    /**
+     * Set the motor running state.
+     * @param speed ; eg: 30
+     * @param sec time; eg: 5
+     */
+    //% blockId=tabby_motor_speed_time block="motor %state set speed %speed sec %sec"
+    //% group="Motors"
+    //% speed.shadow="speedPicker"
+    //% weight=339
+    export function motorSetSpeed(state: MotorState, speed: number, sec: number) {
+        if (state == 0) {
+            motorRun(speed, speed)
+        } else if (state == 1) {
+            motorRun(-speed, -speed)
+        } else if (state == 2) {
+            motorRun(0, speed)
+        } else if (state == 3) {
+            motorRun(speed, 0)
+        }
+        basic.pause(sec*1000)
+        motorRun(0,0)
     }
 
     /**
@@ -344,6 +421,29 @@ namespace tabbyRobot {
     }
 
     /**
+    * Judging the Current Status of Tracking Module.
+    */
+    //% blockId=ringbitcar_tracking block="Tracking state is %state"
+    //% group="Sensor"
+    //% weight=299
+    export function tracking(state: TrackingState): boolean {
+        let l_value = pins.analogReadPin(AnalogPin.P2) > trackingLineThreshold
+        let r_value = pins.analogReadPin(AnalogPin.P1) > trackingLineThreshold
+        let value = -1
+        if (l_value && r_value) {
+            value = 0
+        } else if ((!l_value) && r_value) {
+            value = 1
+        } else if (l_value && (!r_value)) {
+            value = 2
+        } else if ((!l_value) && (!r_value)) {
+            value = 3
+        }
+        return value == state
+
+    }
+
+    /**
      * Retrieves the battery voltage in volts (V).Battery voltage range is from 3.7V to 4.2V.When the voltage is close to 3.7V, please recharge the battery promptly.
      */
     //% blockId=tabby_battery_voltage block="battery voltage(V)"
@@ -397,12 +497,12 @@ namespace tabbyRobot {
             d = ret * 15 / 58;
         }
         let distance = Math.floor(d / 10)
-        if(distance){
+        if (distance) {
             return distance
-        }else{
+        } else {
             return 999
         }
-         
+
 
     }
 
@@ -462,8 +562,8 @@ namespace tabbyRobot {
     //% block="set RGB No.|%index color|%rgb"
     //% weight=190
     export function setIndexColor(index: number, rgb: RGBColors) {
-        let f = index-1;
-        let t = index-1;
+        let f = index - 1;
+        let t = index - 1;
         let r = (rgb >> 16) * (_brightness / 255);
         let g = ((rgb >> 8) & 0xFF) * (_brightness / 255);
         let b = ((rgb) & 0xFF) * (_brightness / 255);
@@ -484,7 +584,7 @@ namespace tabbyRobot {
     //% blockId=tabby_read_version
     //% weight=2
     //% advanced=true
-    export function readVersion():string {
+    export function readVersion(): string {
         init();
         pins.i2cWriteNumber(TABBY_ADDR, REG_VERSION, NumberFormat.UInt8BE);
         let versionBuffer = pins.i2cReadBuffer(TABBY_ADDR, 3);
